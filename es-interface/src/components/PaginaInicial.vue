@@ -6,20 +6,20 @@
           <div class="rectangle" />
           <img class="swap_logo" alt="Swap_logo" :src="swap_logo" />
           <div class="div" />
-          <img class="icon_person" alt="Icon_person" :src="icon_person" />
+          <img class="icon" alt="Icon_person" :src="icon_person" />
           <router-link to="/login" class="text-wrapper">Login</router-link>
           <router-link to="/register" class="text-wrapper-2">Registar</router-link>
           <div class="text-wrapper-3">Iniciar sessão</div>
           <div class="rectangle-2" />
           <div class="text-wrapper-4">Desenvolvido pelos brabos ®</div>
           <div class="selection-container">
-            <div class="student-card" @click="goToStudentLogin">
-                <img class="icon_teacher" alt="Icon Teacher" :src="icon_teacher" />
-              <div class="text-wrapper-6">Sou Estudante</div>
-            </div>
             <div class="teacher-card" @click="goToTeacherLogin">
-                <img class="icon_student" alt="Icon Student" :src="icon_student" />
-              <div class="text-wrapper-5">Sou Docente</div>
+              <img class="edicao-de-imagem" alt="Icon Teacher" :src="icon_teacher" />
+              <div class="text-wrapper-6">Sou Docente</div>
+            </div>
+            <div class="student-card" @click="goToStudentLogin">
+              <img class="img" alt="Icon Student" :src="icon_student" />
+              <div class="text-wrapper-5">Sou Estudante</div>
             </div>
           </div>
         </div>
@@ -61,59 +61,62 @@
   
   .pagina-inicial .overlap-group-wrapper {
     background-color: #ffffff;
-    height: 1024px;
-    width: 1440px;
+    height: 100vh;
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
   }
   
   .pagina-inicial .overlap-group {
-    height: 1024px;
+    height: 100%;
     position: relative;
   }
   
   .pagina-inicial .backgorund {
-    height: 949px;
+    height: 92.77vh;
     left: 0;
     object-fit: cover;
     position: absolute;
-    top: 75px;
-    width: 1440px;
+    top: 7.32vh;
+    width: 100%;
   }
   
   .pagina-inicial .rectangle {
     background-color: #a37caf;
-    height: 89px;
+    height: 8.69vh;
     left: 0;
     position: absolute;
     top: 0;
-    width: 1440px;
+    width: 100%;
   }
   
-  .pagina-inicial .ewywcq {
-    height: 65px;
+  .pagina-inicial .swap_logo {
+    height: 6.35vh;
     left: 0;
     object-fit: cover;
     position: absolute;
-    top: 10px;
+    top: 0.98vh;
     width: 209px;
   }
   
   .pagina-inicial .div {
     background-color: #d4b1df;
     border-radius: 30px;
-    height: 600px;
-    left: 320px;
+    height: 58.59vh;
+    left: 22.22%;
     position: absolute;
-    top: 212px;
-    width: 800px;
+    top: 20.70vh;
+    width: 55.56%;
   }
   
-  .pagina-inicial .imageedit {
-    height: 119px;
-    left: 660px;
+  .pagina-inicial .icon {
+    height: 7.62vh;
+    left: 50%;
+    transform: translateX(-50%);
     object-fit: cover;
     position: absolute;
-    top: 250px;
-    width: 119px;
+    top: 28.22vh;
+    width: 8.26vw;
   }
   
   .pagina-inicial .text-wrapper {
@@ -121,11 +124,11 @@
     font-family: "Istok Web-Regular", Helvetica;
     font-size: 30px;
     font-weight: 400;
-    left: 1188px;
+    left: 82.50%;
     letter-spacing: 0;
     line-height: normal;
     position: absolute;
-    top: 24px;
+    top: 2.34vh;
     width: 99px;
     text-decoration: none;
   }
@@ -135,11 +138,11 @@
     font-family: "Istok Web-Regular", Helvetica;
     font-size: 30px;
     font-weight: 400;
-    left: 1284px;
+    left: 89.17%;
     letter-spacing: 0;
     line-height: normal;
     position: absolute;
-    top: 24px;
+    top: 2.34vh;
     width: 127px;
     text-decoration: none;
   }
@@ -149,22 +152,22 @@
     font-family: "Istok Web-Regular", Helvetica;
     font-size: 45px;
     font-weight: 400;
-    left: 290px;
+    left: 20.14%;
     letter-spacing: 0;
     line-height: normal;
     position: absolute;
     text-align: center;
-    top: 355px;
-    width: 860px;
+    top: 34.67vh;
+    width: 59.72%;
   }
   
   .pagina-inicial .rectangle-2 {
     background-color: #e9e4eb;
-    height: 89px;
+    height: 8.69vh;
     left: 0;
     position: absolute;
-    top: 935px;
-    width: 1440px;
+    bottom: 0;
+    width: 100%;
   }
   
   .pagina-inicial .text-wrapper-4 {
@@ -172,13 +175,13 @@
     font-family: "Inter-Regular", Helvetica;
     font-size: 24px;
     font-weight: 400;
-    left: 482px;
+    left: 33.47%;
     letter-spacing: 0;
     line-height: normal;
     position: absolute;
     text-align: center;
-    top: 961px;
-    width: 476px;
+    bottom: 2.54vh;
+    width: 33.06%;
   }
   
   .pagina-inicial .selection-container {
@@ -186,33 +189,30 @@
     justify-content: center;
     gap: 32px;
     position: absolute;
-    top: 442px;
-    left: 320px;
-    width: 800px;
+    top: 43.16vh;
+    left: 22.22%;
+    width: 55.56%;
   }
   
   .pagina-inicial .student-card,
   .pagina-inicial .teacher-card {
     background-color: #ffffff;
     border-radius: 20px;
-    height: 333px;
-    width: 320px;
+    height: 32.52vh;
+    width: 40%;
+    max-width: 320px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    position: relative;
     cursor: pointer;
   }
   
-  .pagina-inicial .edicao-de-imagem {
-    height: 216px;
-    width: 216px;
-    object-fit: cover;
-  }
-  
-  .pagina-inicial .img {
-    height: 216px;
-    width: 216px;
+  .pagina-inicial .teacher-card .edicao-de-imagem,
+  .pagina-inicial .student-card .img {
+    height: 21.09vh;
+    width: 67.5%;
+    max-width: 216px;
     object-fit: cover;
   }
   
@@ -225,6 +225,8 @@
     letter-spacing: -1.35px;
     line-height: normal;
     text-align: center;
-    margin-top: 10px;
+    position: absolute;
+    bottom: 1.95vh;
+    width: 100%;
   }
   </style>
