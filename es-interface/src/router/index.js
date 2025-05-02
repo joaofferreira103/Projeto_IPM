@@ -5,7 +5,11 @@ import StudentLogin from "@/views/StudentLogin.vue";
 import DocenteLogin from "@/views/DocenteLogin.vue";
 import LoginPage from "@/views/LoginPage.vue";
 import RegisterPage from "@/views/RegisterPage.vue";
-
+import ProfilePage from "@/views/ProfilePage.vue";
+import SchedulePage from "@/views/SchedulePage.vue";
+import DcLogadoPage from "@/views/DcLogadoPage.vue";
+import OptionsPage from "@/views/OptionsPage.vue";
+import RequestsPage from "@/views/RequestsPage.vue";
 
 const routes = [
   {
@@ -37,6 +41,31 @@ const routes = [
     path: "/register",
     name: "RegisterPage",
     component: RegisterPage,
+  },
+  {
+    path: "/perfil",
+    name: "ProfilePage",
+    component: ProfilePage,
+  },
+  {
+    path: "/opcoes",
+    name: "OptionsPage",
+    component: OptionsPage,
+  },
+  {
+    path: "/horarios",
+    name: "SchedulePage",
+    component: SchedulePage,
+  },
+  {
+    path: "/pedidos",
+    name: "RequestsPage",
+    component: RequestsPage,
+  },
+  {
+    path: "/dc-logado",
+    name: "DcLogadoPage",
+    component: DcLogadoPage,
   },
 ];
 

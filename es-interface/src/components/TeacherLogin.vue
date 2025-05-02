@@ -42,9 +42,15 @@
       };
     },
     methods: {
+
+      goToDcLogado() {
+        this.$router.push("/dc-logado");
+      },
+
       handleLogin() {
         // Add login logic here (e.g., API call)
         console.log('Login attempted with:', this.username, this.password);
+        this.goToDcLogado();
       }
     }
   };
