@@ -1,5 +1,5 @@
 <template>
-    <Card height="41.60vh" width="81.18%" class="requests-container">
+    <Card height="auto" width="81.18%" class="requests-container">
       <div class="requests-header">
         <img class="icon-mail" alt="Icon mail" :src="iconMail" />
         <div class="text-wrapper-14">PEDIDOS</div>
@@ -32,19 +32,20 @@
         <div class="line"></div>
       </div>
       <router-link to="/pedidos" class="view-all-button">
-        <div class="rectangle-2"></div>
-        <div class="text-wrapper">Ver todos os pedidos</div>
+        <div class="rectangle-2">
+          <div class="text-wrapper">Ver todos os pedidos</div>
+        </div>
       </router-link>
     </Card>
   </template>
   
   <script>
-  import Card from '@/components/CardComponent.vue'; // Import the Card component
+  import Card from '@/components/CardComponent.vue';
   
   export default {
     name: "RequestsTable",
     components: {
-      Card, // Register the Card component
+      Card,
     },
     props: {
       iconMail: { type: String, required: true },
@@ -56,40 +57,39 @@
   
   <style scoped>
   .requests-container {
-    left: 10.69%; /* 154px / 1440 * 100 */
-    position: absolute;
-    top: 48.05vh; /* 492px / 1024 * 100 */
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
   }
   
   .requests-header {
-    display: flex;
-    align-items: center;
-    position: absolute;
-    left: 5.13%; /* 60px / 1169px * 100 */
-    top: 4.69vh; /* 20px / 426px * 100 */
-  }
-  
-  .icon-mail {
-    height: 10.56vh; /* 108px / 1024 * 100 */
-    width: 9.24%; /* 108px / 1169px * 100 */
-    object-fit: cover;
-  }
-  
-  .text-wrapper-14 {
-    color: #3a2658;
-    font-family: "Istok Web-Bold", Helvetica;
-    font-size: 44px;
-    font-weight: 700;
-    letter-spacing: 0;
-    line-height: normal;
-    margin-left: 1rem;
-  }
+  display: flex;
+  align-items: center; /* Alinha verticalmente os itens */
+  justify-content: flex-start; /* Alinha os itens à esquerda */
+  gap: 10px; /* Espaçamento entre o ícone e o texto */
+  margin-bottom: 20px;
+  width: 100%; /* Garante que ocupe toda a largura do Card */
+}
+
+.icon-mail {
+  height: 10.56vh;
+  width: auto;
+  object-fit: contain;
+  margin: 0; /* Remove qualquer margem desnecessária */
+}
+
+.text-wrapper-14 {
+  color: #3a2658;
+  font-family: "Istok Web-Bold", Helvetica;
+  font-size: 44px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: normal;
+  margin: 0; /* Remove qualquer margem desnecessária */
+}
   
   .requests-table {
-    position: absolute;
-    top: 19.72vh; /* 84px / 426px * 100 */
-    left: 2.82%; /* 33px / 1169px * 100 */
-    width: 94.10%; /* 1100px / 1169px * 100 */
+    width: 100%;
   }
   
   .table-headers {
@@ -109,7 +109,7 @@
     letter-spacing: 0;
     line-height: normal;
     text-align: center;
-    width: 20%;
+    flex: 1;
   }
   
   .request-row {
@@ -121,9 +121,10 @@
   
   .pessoa-circle-small {
     height: 5.96vh; /* 61px / 1024 * 100 */
-    width: 5.23%; /* 61px / 1169px * 100 */
+    width: 5.96vh; /* 61px / 1024 * 100 */
     background-color: #ffffff;
     border-radius: 50%;
+    flex-shrink: 0;
   }
   
   .text-wrapper-2,
@@ -141,36 +142,35 @@
     letter-spacing: 0;
     line-height: normal;
     text-align: center;
-    width: 20%;
+    flex: 1;
   }
   
   .icon-warning,
   .img {
     height: 3.91vh; /* 40px / 1024 * 100 */
-    width: 3.42%; /* 40px / 1169px * 100 */
-    object-fit: cover;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
   }
   
   .line {
     height: 1px;
     width: 100%;
-    background-color: #d4b1df; /* Card color */
+    background-color: #d4b1df;
     margin: 1vh 0;
   }
   
   .view-all-button {
-    position: absolute;
-    bottom: 4.69vh; /* 20px / 426px * 100 */
-    left: 50%;
-    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
     text-decoration: none;
   }
   
   .rectangle-2 {
     background-color: #3a2658;
     border-radius: 20px;
-    height: 3.91vh; /* 40px / 1024 * 100 */
-    width: 15.42vw; /* 222px / 1440 * 100 */
+    padding: 10px 20px;
   }
   
   .text-wrapper {
@@ -181,10 +181,5 @@
     letter-spacing: 0;
     line-height: normal;
     text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
   }
   </style>
