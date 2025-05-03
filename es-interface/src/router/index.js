@@ -7,7 +7,8 @@ import LoginPage from "@/views/LoginPage.vue";
 import RegisterPage from "@/views/RegisterPage.vue";
 import ProfilePage from "@/views/ProfilePage.vue";
 import SchedulePage from "@/views/SchedulePage.vue";
-import DcLogadoPage from "@/views/DcLogadoPage.vue";
+import DcLogadoPage from "@/views/DcLogadoPage.vue"; 
+import AlunoLogadoPage from "@/views/AlunoLogadoPage.vue";
 import OptionsPage from "@/views/OptionsPage.vue";
 import RequestsPage from "@/views/RequestsPage.vue";
 
@@ -66,6 +67,11 @@ const routes = [
     path: "/dc-logado",
     name: "DcLogadoPage",
     component: DcLogadoPage,
+  },
+  { 
+    path: "/aluno-logado",
+    name: "AlunoLogadoPage",
+    component: AlunoLogadoPage,
   },
 ];
 

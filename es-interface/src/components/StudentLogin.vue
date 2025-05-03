@@ -43,7 +43,7 @@
     },
     methods: {
       handleLogin() {
-        this.$router.push("/");
+        this.$router.push("/aluno-logado");
       },
       clearForm() {
         this.username = '';
@@ -107,7 +107,7 @@
     font-family: "Istok Web-Regular", Helvetica;
     font-size: 38px;
     font-weight: 400;
-    text-align: center;
+    text-align: left;
   }
   
   .form-label {
