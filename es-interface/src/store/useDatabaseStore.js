@@ -35,7 +35,8 @@ export const useDatabaseStore = defineStore("database", {
   getters: {
     getStudentById: (state) => (id) => state.students.find((student) => student.id === id),
     getTeacherById: (state) => (id) => state.teachers.find((teacher) => teacher.id === id),
-    getCoursesByDegree: (state) => (degreeId) => state.courses.filter((course) => course.degreeId === degreeId),
+    getCourseById: (state) => (id) => state.courses.find((course) => course.id === id),
+    getCourseByDegree: (state) => (degreeId) => state.courses.filter((course) => course.degreeId === degreeId),
     getShiftsByCourse: (state) => (courseId) => state.shifts.filter((shift) => shift.courseId === courseId),
   },
 });

@@ -11,6 +11,7 @@ import DcLogadoPage from "@/views/DcLogadoPage.vue";
 import AlunoLogadoPage from "@/views/AlunoLogadoPage.vue";
 import OptionsPage from "@/views/OptionsPage.vue";
 import RequestsPage from "@/views/RequestsPage.vue";
+import CourseDetailsPage from "@/views/CourseDetailsPage.vue";
 
 const routes = [
   {
@@ -72,6 +73,11 @@ const routes = [
     path: "/aluno-logado",
     name: "AlunoLogadoPage",
     component: AlunoLogadoPage,
+  },
+  { 
+    path: "/detalhesUC/:id",
+    name: "CoursesDetailsPage",
+    component: CourseDetailsPage,
   },
 ];
 

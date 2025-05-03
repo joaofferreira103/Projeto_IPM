@@ -286,7 +286,17 @@
     { "id": 147, "shiftId": 27, "studentId": 30 },
     { "id": 148, "shiftId": 28, "studentId": 30 },
     { "id": 149, "shiftId": 29, "studentId": 30 },
-    { "id": 150, "shiftId": 30, "studentId": 30 }
+    { "id": 150, "shiftId": 30, "studentId": 30 },
+    { "id": 151, "shiftId": 1, "studentId": 20 },
+    { "id": 152, "shiftId": 1, "studentId": 21 },
+    { "id": 153, "shiftId": 1, "studentId": 22 },
+    { "id": 154, "shiftId": 1, "studentId": 23 },
+    { "id": 155, "shiftId": 1, "studentId": 24 },
+    { "id": 156, "shiftId": 1, "studentId": 25 },
+    { "id": 157, "shiftId": 2, "studentId": 26 },
+    { "id": 158, "shiftId": 2, "studentId": 27 },
+    { "id": 159, "shiftId": 2, "studentId": 28 },
+    { "id": 160, "shiftId": 2, "studentId": 29 }
   ],
   "conflicts": [
     { "id": 1, "studentId": 1, "courseIDs": [1, 11] },
