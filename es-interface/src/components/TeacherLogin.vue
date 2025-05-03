@@ -8,13 +8,27 @@
           <div class="login-title">Iniciar sessão</div>
         </div>
         <label class="form-label" for="username">Utilizador:</label>
-        <input id="username" class="retangulo-user" type="text" v-model="username" placeholder="Insira o utilizador" autocomplete="username" />
+        <input
+          id="username"
+          class="retangulo-user"
+          type="text"
+          v-model="username"
+          placeholder="Insira o utilizador"
+          autocomplete="username"
+        />
         <label class="form-label" for="password">Palavra-passe:</label>
-        <input id="password" class="retangulo-pass" type="password" v-model="password" placeholder="Insira a palavra-passe" autocomplete="current-password" />
+        <input
+          id="password"
+          class="retangulo-pass"
+          type="password"
+          v-model="password"
+          placeholder="Insira a palavra-passe"
+          autocomplete="current-password"
+        />
         <div class="login-actions">
           <button class="boto-login" type="submit">Entrar</button>
           <button class="boto-clear" type="button" @click="clearForm">Limpar</button>
-          <span class="forgot-password" href="#">Esqueci-me da palavra-passe</span>
+          <span class="forgot-password">Esqueci-me da palavra-passe</span>
         </div>
       </form>
     </div>
@@ -26,33 +40,54 @@
 </template>
 
 <script>
-import HeaderComponent from '@/components/HeaderComponent.vue';
-import profileIcon from '@/assets/images/icon_teacher.png';
+import HeaderComponent from "@/components/HeaderComponent.vue";
+import profileIcon from "@/assets/images/icon_teacher.png";
+import { useDatabaseStore } from "@/store/useDatabaseStore";
 
 export default {
-  name: 'TeacherLogin',
+  name: "TeacherLogin",
   components: {
     Header: HeaderComponent,
   },
   data() {
     return {
       profileIcon,
-      username: '',
-      password: ''
+      username: "",
+      password: "",
     };
   },
   methods: {
     handleLogin() {
-      this.$router.push("/dc-logado");
+      const databaseStore = useDatabaseStore();
+
+      // Certifique-se de que os dados foram carregados na store
+      if (!databaseStore.teachers || databaseStore.teachers.length === 0) {
+        databaseStore.loadDatabase();
+      }
+
+      // Verifica se o utilizador existe na base de dados
+      const teacher = databaseStore.teachers.find(
+        (t) => t.email === this.username.trim() && t.password === this.password.trim()
+      );
+
+      if (teacher) {
+        // Define o utilizador na store
+        databaseStore.user = { name: teacher.name, role: "teacher" };
+
+        alert(`Bem-vindo, ${teacher.name}`);
+        this.$router.push("/dc-logado");
+      } else {
+        alert("Credenciais inválidas. Por favor, tente novamente.");
+      }
     },
     clearForm() {
-      this.username = '';
-      this.password = '';
+      this.username = "";
+      this.password = "";
     },
     goBack() {
       this.$router.back();
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -85,7 +120,7 @@ export default {
   gap: 16px;
   max-width: 500px;
   width: 100%;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
 }
 
 .login-header {
@@ -116,9 +151,9 @@ export default {
   color: #3a2658;
   margin-bottom: 2px;
   margin-top: 8px;
-  text-align: left;      /* Garante alinhamento à esquerda */
-  width: 100%;           /* Ocupa toda a largura do form */
-  display: block;        /* Garante comportamento de bloco */
+  text-align: left;
+  width: 100%;
+  display: block;
 }
 
 .retangulo-user,
@@ -182,7 +217,7 @@ export default {
   font-family: "Istok Web-Regular", Helvetica;
   font-size: 16px;
   text-decoration: none;
-  cursor: default; /* Não é clicável */
+  cursor: default;
   transition: none;
 }
 

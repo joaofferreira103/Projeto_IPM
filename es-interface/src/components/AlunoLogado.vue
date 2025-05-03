@@ -5,9 +5,8 @@
       <div class="overlap-group">
         <!-- Greeting -->
         <p class="bem-vindo-maria">
-          <span class="span">Bem-vinda</span>
-          <span class="text-wrapper-17">, </span>
-          <span class="span">Maria</span>
+          <span class="span">Bem-vindo/a</span>
+          <span class="text-wrapper-17"></span>
         </p>
 
         <!-- Main Options -->

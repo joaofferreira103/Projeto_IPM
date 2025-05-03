@@ -9,7 +9,7 @@
     />
     <div class="header-right" v-if="isLoggedIn">
       <button class="logout-button" @click="showLogoutOverlay = true">Sair</button>
-      <div class="user-name">José</div>
+      <div class="user-name">{{ userName }}</div>
       <div class="user-circle"></div>
     </div>
     <LogoutComponent
@@ -22,18 +22,24 @@
 
 <script>
 import LogoutComponent from "@/components/LogoutComponent.vue";
+import { useDatabaseStore } from "@/store/useDatabaseStore";
+
 export default {
   name: "HeaderComponent",
   components: { LogoutComponent },
   props: {
-    iconSwap: {
-      type: String,
-      required: true,
-    },
     isLoggedIn: {
       type: Boolean,
       default: false,
     },
+  },
+  setup() {
+    const userStore = useDatabaseStore();
+
+    // Retorna o nome do utilizador da store
+    return {
+      userName: userStore.user?.name || "Utilizador",
+    };
   },
   data() {
     return {
@@ -42,12 +48,19 @@ export default {
   },
   methods: {
     logout() {
-      localStorage.removeItem('user');
+      // Limpa o estado do utilizador na store
+      const userStore = useDatabaseStore();
+      userStore.user = null;
+
+      // Remove o utilizador do localStorage (se necessário)
+      localStorage.removeItem("user");
+
+      // Fecha o overlay e redireciona para a página inicial
       this.showLogoutOverlay = false;
-      this.$router.push('/');
+      this.$router.push("/");
     },
     goToDcLogado() {
-      this.$router.push('/dc-logado');
+      this.$router.push("/dc-logado");
     },
   },
 };
