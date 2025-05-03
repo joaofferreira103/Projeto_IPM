@@ -8,16 +8,23 @@
       style="cursor:pointer"
     />
     <div class="header-right" v-if="isLoggedIn">
-      <router-link to="/login" class="logout-button" @click="logout">Sair</router-link>
+      <button class="logout-button" @click="showLogoutOverlay = true">Sair</button>
       <div class="user-name">José</div>
       <div class="user-circle"></div>
     </div>
+    <LogoutComponent
+      v-if="showLogoutOverlay"
+      @confirm="logout"
+      @cancel="showLogoutOverlay = false"
+    />
   </div>
 </template>
 
 <script>
+import LogoutComponent from "@/components/LogoutComponent.vue";
 export default {
   name: "HeaderComponent",
+  components: { LogoutComponent },
   props: {
     iconSwap: {
       type: String,
@@ -28,9 +35,15 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      showLogoutOverlay: false,
+    };
+  },
   methods: {
     logout() {
       localStorage.removeItem('user');
+      this.showLogoutOverlay = false;
       this.$router.push('/');
     },
     goToDcLogado() {
@@ -76,7 +89,9 @@ export default {
   text-decoration: none;
   padding: 5px 10px;
   background-color: #ffffff;
-  border-radius: 10px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
 }
 
 .user-name {
