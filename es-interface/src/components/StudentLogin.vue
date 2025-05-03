@@ -72,7 +72,7 @@
   
         if (student) {
           // Define o utilizador na store
-          databaseStore.user = { name: student.name, role: "student" };
+          databaseStore.user = { name: student.name, role: "student", id: student.id };
   
           alert(`Bem-vindo, ${student.name}`);
           this.$router.push("/aluno-logado");
