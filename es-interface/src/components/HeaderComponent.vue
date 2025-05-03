@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <img class="logo" alt="SWAP Logo" src="@/assets/images/icon_swap.png" />
-    <div class="header-right">
+    <div class="header-right" v-if="isLoggedIn">
       <router-link to="/login" class="logout-button" @click="logout">Sair</router-link>
       <div class="user-name">José</div>
       <div class="user-circle"></div>
@@ -16,6 +16,10 @@ export default {
     iconSwap: {
       type: String,
       required: true,
+    },
+    isLoggedIn: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {
@@ -39,6 +43,7 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
+  box-sizing: border-box; /* Inclui padding e border no cálculo da largura */
   z-index: 1000; /* Garante que o cabeçalho fique acima de outros elementos */
 }
 
@@ -50,7 +55,8 @@ export default {
 .header-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
+  margin-left: auto;
 }
 
 .logout-button {
@@ -76,7 +82,7 @@ export default {
   width: 6.84vh; /* 70px / 1024 * 100 */
   background-color: #ffffff;
   border-radius: 50%;
-  background-image: url('@/assets/images/image.png');
+  background-image: url('@/assets/images/icon_person.png');
   background-size: cover;
   background-position: center;
 }

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "@/views/HomePage.vue";
 import AboutPage from "@/views/AboutPage.vue";
-import StudentLogin from "@/views/StudentLogin.vue";
+import StudentLoginPage from "@/views/StudentLoginPage.vue";
 import DocenteLogin from "@/views/DocenteLogin.vue";
 import LoginPage from "@/views/LoginPage.vue";
 import RegisterPage from "@/views/RegisterPage.vue";
@@ -24,8 +24,8 @@ const routes = [
   },
   {
     path: "/student-login",
-    name: "StudentLogin",
-    component: StudentLogin,
+    name: "StudentLoginPage",
+    component: StudentLoginPage,
   },
   {
     path: "/teacher-login",

@@ -1,6 +1,6 @@
 <template>
   <div class="dc-logado">
-    <Header />
+    <Header :is-logged-in="true" />
     <div class="overlap-group-wrapper">
       <div class="overlap-group">
         <!-- Greeting -->
