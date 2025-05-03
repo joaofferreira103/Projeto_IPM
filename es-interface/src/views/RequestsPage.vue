@@ -1,13 +1,16 @@
 <!-- src/views/RequestsPage.vue -->
 <template>
     <div>
-      <h1>Requests</h1>
-      <p>General requests form will go here.</p>
+        <RequestsComponent />
     </div>
   </template>
   
   <script>
+  import RequestsComponent from '@/components/RequestsComponent.vue';
   export default {
-    name: "RequestsPage", 
+    name: "RequestsPage",
+    components: {
+      RequestsComponent,
+    },
   };
   </script>

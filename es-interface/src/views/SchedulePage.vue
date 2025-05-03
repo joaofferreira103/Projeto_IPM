@@ -1,13 +1,16 @@
 <!-- src/views/SchedulePage.vue -->
 <template>
     <div>
-      <h1>Schedule</h1>
-      <p>General Schedule form will go here.</p>
+        <ScheduleHome />
     </div>
   </template>
   
   <script>
+  import ScheduleHome from '@/components/ScheduleHome.vue';
   export default {
-    name: "SchedulePage", // Changed from "Login"
+    name: "SchedulePage",
+    components: {
+      ScheduleHome,
+    },
   };
   </script>
