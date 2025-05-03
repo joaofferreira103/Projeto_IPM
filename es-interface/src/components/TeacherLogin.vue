@@ -76,13 +76,13 @@ export default {
 
       if (teacher) {
         // Define o utilizador como professor na store
-        databaseStore.user = { name: teacher.name, role: "teacher" };
+        databaseStore.user = { name: teacher.name, role: "teacher", id: teacher.id };
 
         alert(`Bem-vindo, ${teacher.name}`);
         this.$router.push("/dc-logado");
       } else if (isDirector) {
         // Define o utilizador como diretor na store
-        databaseStore.user = { name: director.name, role: "director" };
+        databaseStore.user = { name: director.name, role: "director", id: director.id };
 
         alert(`Bem-vindo, ${director.name}`);
         this.$router.push("/dc-logado");

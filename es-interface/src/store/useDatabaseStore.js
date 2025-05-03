@@ -32,19 +32,50 @@ export const useDatabaseStore = defineStore("database", {
       this.classroomRequests = database.classroomRequests;
       this.shiftRequests = database.shiftRequests;
     },
-    filterRequests(){
-      if (this.user) return [];
-      if (this.user.role === "teacher") {
-        return this.classroomRequests.filter(
-          (request) => request.teacherId === this.user.id
-        );
-      } else if (this.user.role === "student") {
-        return this.shiftRequests.filter(
-          (request) => request.studentId === this.user.id
-        );
+    filterRequests() {
+      if (!this.user) return []; // Retorna vazio se não houver usuário logado
+    
+      let requests = [];
+      if (this.user.role === "student") {
+        requests = this.shiftRequests
+          .filter((request) => request.studentId === this.user.id)
+          .map((request) => ({
+            sender: this.students.find((s) => s.id === request.studentId)?.name || "Desconhecido",
+            type: "Troca de Turno",
+            subject: `Turno ${request.shiftId}`,
+            date: new Date().toLocaleDateString("pt-PT"), // Ajuste conforme necessário
+            isWarning: !request.responseSeenByStudent,
+          }));
+      } else if (this.user.role === "teacher") {
+        requests = this.classroomRequests
+          .filter((request) => request.teacherId === this.user.id)
+          .map((request) => ({
+            sender: this.teachers.find((t) => t.id === request.teacherId)?.name || "Desconhecido",
+            type: "Reserva de Sala",
+            subject: `Sala ${request.classroomId}`,
+            date: new Date().toLocaleDateString("pt-PT"), // Ajuste conforme necessário
+            isWarning: !request.responseSeenByTeacher,
+          }));
+      } else if (this.user.role === "director") {
+        requests = [
+          ...this.shiftRequests.map((request) => ({
+            sender: this.students.find((s) => s.id === request.studentId)?.name || "Desconhecido",
+            type: "Troca de Turno",
+            subject: `Turno ${request.shiftId}`,
+            date: new Date().toLocaleDateString("pt-PT"),
+            isWarning: !request.responseSeenByStudent,
+          })),
+          ...this.classroomRequests.map((request) => ({
+            sender: this.teachers.find((t) => t.id === request.teacherId)?.name || "Desconhecido",
+            type: "Reserva de Sala",
+            subject: `Sala ${request.classroomId}`,
+            date: new Date().toLocaleDateString("pt-PT"),
+            isWarning: !request.responseSeenByTeacher,
+          })),
+        ];
       }
-      return [];
-    },
+      return requests;
+    }
   },
   getters: {
     getStudentById: (state) => (id) => state.students.find((student) => student.id === id),
