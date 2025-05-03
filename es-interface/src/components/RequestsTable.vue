@@ -12,22 +12,24 @@
           <div class="text-wrapper-6">ASSUNTO</div>
           <div class="text-wrapper-7">DATA</div>
         </div>
-        <div class="request-row">
-          <div class="pessoa-circle-small"></div>
-          <div class="text-wrapper-2">Jorge Macário</div>
-          <div class="text-wrapper-8">Docente</div>
-          <div class="text-wrapper-10">Alteração de Sala</div>
-          <div class="text-wrapper-12">17h</div>
-          <img class="icon-warning" alt="Icon warning" :src="iconWarning" />
-        </div>
-        <div class="line"></div>
-        <div class="request-row">
-          <div class="pessoa-circle-small"></div>
-          <div class="text-wrapper-3">Maria Fernandes</div>
-          <div class="text-wrapper-9">Aluno</div>
-          <div class="text-wrapper-11">Mudança de Turno</div>
-          <div class="text-wrapper-13">1d</div>
-          <img class="img" alt="Icon warning" :src="image" />
+        <div v-for="(request, index) in requests" :key="index" class="request-row">
+        <div class="pessoa-circle-small"></div>
+        <div class="text-wrapper-2">{{ request.sender }}</div>
+        <div class="text-wrapper-8">{{ request.type }}</div>
+        <div class="text-wrapper-10">{{ request.subject }}</div>
+        <div class="text-wrapper-12">{{ request.date }}</div>
+        <img
+          v-if="request.isWarning"
+          class="icon-warning"
+          alt="Icon warning"
+          :src="iconWarning"
+        />
+        <img
+          v-else
+          class="img"
+          alt="Request image"
+          :src="image"
+        />
         </div>
         <div class="line"></div>
       </div>
@@ -51,6 +53,7 @@
       iconMail: { type: String, required: true },
       iconWarning: { type: String, required: true },
       image: { type: String, required: true },
+      requests: { type: Array, required: true },
     },
   };
   </script>

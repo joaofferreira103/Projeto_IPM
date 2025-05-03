@@ -65,16 +65,26 @@ export default {
         databaseStore.loadDatabase();
       }
 
-      // Verifica se o utilizador existe na base de dados
-      const teacher = databaseStore.teachers.find(
+       // Verifica se o utilizador é um professor
+       const teacher = databaseStore.teachers.find(
         (t) => t.email === this.username.trim() && t.password === this.password.trim()
       );
 
+      // Verifica se o utilizador é o diretor
+      const director = databaseStore.directors.find((d) => d.email === this.username.trim());
+      const isDirector = director && director.password === this.password.trim();
+
       if (teacher) {
-        // Define o utilizador na store
+        // Define o utilizador como professor na store
         databaseStore.user = { name: teacher.name, role: "teacher" };
 
         alert(`Bem-vindo, ${teacher.name}`);
+        this.$router.push("/dc-logado");
+      } else if (isDirector) {
+        // Define o utilizador como diretor na store
+        databaseStore.user = { name: director.name, role: "director" };
+
+        alert(`Bem-vindo, ${director.name}`);
         this.$router.push("/dc-logado");
       } else {
         alert("Credenciais inválidas. Por favor, tente novamente.");
