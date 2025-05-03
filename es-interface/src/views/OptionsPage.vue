@@ -1,13 +1,19 @@
 <!-- src/views/OptionsPage.vue -->
 <template>
     <div>
-      <h1>Opções</h1>
-      <p>General optionses form will go here.</p>
+        <OptionsComponent />        
     </div>
   </template>
   
   <script>
+
+import OptionsComponent from "@/components/OptionsComponent.vue"; // Import the OptionsComponent
   export default {
     name: "OptionsPage", 
-  };
+    components: {
+      OptionsComponent, 
+    },
+    
+  }
+  
   </script>

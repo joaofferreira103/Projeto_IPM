@@ -1,13 +1,14 @@
-<!-- src/views/ProfilePage.vue -->
 <template>
-    <div>
-      <h1>Profile page</h1>
-      <p>General perfil form will go here.</p>
-    </div>
+    <ProfileComponent />
   </template>
   
   <script>
+  import ProfileComponent from "@/components/ProfileComponent.vue";
+  
   export default {
-    name: "ProfilePage", 
+    name: "OpcoesView",
+    components: {
+      ProfileComponent,
+    },
   };
-  </script> 
+  </script>

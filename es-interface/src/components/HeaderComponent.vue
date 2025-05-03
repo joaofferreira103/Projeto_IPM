@@ -1,6 +1,12 @@
 <template>
   <div class="header">
-    <img class="logo" alt="SWAP Logo" src="@/assets/images/icon_swap.png" />
+    <img
+      class="logo"
+      alt="SWAP Logo"
+      src="@/assets/images/icon_swap.png"
+      @click="goToDcLogado"
+      style="cursor:pointer"
+    />
     <div class="header-right" v-if="isLoggedIn">
       <router-link to="/login" class="logout-button" @click="logout">Sair</router-link>
       <div class="user-name">José</div>
@@ -26,6 +32,9 @@ export default {
     logout() {
       localStorage.removeItem('user');
       this.$router.push('/');
+    },
+    goToDcLogado() {
+      this.$router.push('/dc-logado');
     },
   },
 };
