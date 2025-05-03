@@ -42,6 +42,7 @@
           :icon-mail="iconMail"
           :icon-warning="iconWarning"
           :image="image"
+          :requests ="requests"
         />
       </div>
     </div>
@@ -60,6 +61,8 @@ import iconSchedule from "@/assets/images/icon_schedule.png";
 import iconSwap from "@/assets/images/icon_swap.png";
 import iconWarning from "@/assets/images/icon_warning.png";
 import image from "@/assets/images/image.png";
+import { useDatabaseStore } from '@/store/useDatabaseStore';
+
 
 export default {
   name: "DcLogado",
@@ -68,6 +71,15 @@ export default {
     RequestsTable,
     Card: CardComponent,
   },
+  setup(){
+    const databaseStore = useDatabaseStore();
+    const requests = databaseStore.filterRequests();
+    const userName = databaseStore.user?.name || "Utilizador";
+    return {
+      requests,
+      userName,
+    };
+  },  
   data() {
     return {
       background,
