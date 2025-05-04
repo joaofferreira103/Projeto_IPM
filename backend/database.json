@@ -2288,6 +2288,13 @@
       "teacherId": 1,
       "response": "ok",
       "responseSeenByTeacher": false
+    },
+    {
+      "id": "2",
+      "classroomId": 2,
+      "teacherId": 2,
+      "response": "ok",
+      "responseSeenByTeacher": false
     }
   ],
   "shiftRequests": [
