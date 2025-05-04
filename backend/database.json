@@ -680,7 +680,7 @@
     {
       "id": "2",
       "courseId": 1,
-      "classroomId": "1",
+      "classroomId": "5",
       "day": "Tuesday",
       "from": 14,
       "to": 16,
@@ -2127,16 +2127,6 @@
       "studentId": 29
     },
     {
-      "id": "40c0",
-      "shiftId": "61",
-      "studentId": "13"
-    },
-    {
-      "id": "0570",
-      "shiftId": "62",
-      "studentId": "13"
-    },
-    {
       "id": "320f",
       "shiftId": "61",
       "studentId": "20"
@@ -2155,6 +2145,16 @@
       "id": "8dd6",
       "shiftId": "62",
       "studentId": "25"
+    },
+    {
+      "id": "1b4d",
+      "shiftId": "61",
+      "studentId": "13"
+    },
+    {
+      "id": "17ef",
+      "shiftId": "2",
+      "studentId": "13"
     }
   ],
   "conflicts": [
