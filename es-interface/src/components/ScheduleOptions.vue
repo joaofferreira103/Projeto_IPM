@@ -174,17 +174,22 @@
     opacity: 0.22;
   }
   .voltar {
-    text-align: right;
-    margin: 18px 60px 0 0;
-  }
-  .voltar a {
-    color: #3a2658;
-    text-decoration: none;
-    font-size: 1.1rem;
-  }
-  .voltar a:hover {
-    text-decoration: underline;
-  }
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+  font-family: "Istok Web-Regular", Helvetica;
+  font-size: 22px;
+  color: #3a2658;
+  z-index: 11;
+}
+.voltar a {
+  color: #3a2658;
+  text-decoration: none;
+  transition: text-decoration 0.2s;
+}
+.voltar a:hover {
+  text-decoration: underline;
+}
   .overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
