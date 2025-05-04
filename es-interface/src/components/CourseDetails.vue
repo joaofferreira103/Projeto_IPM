@@ -237,7 +237,6 @@
       async saveAllocation({ tShiftId, plShiftId }) {
   const databaseStore = useDatabaseStore();
 
-  // Função auxiliar para gerar o próximo id numérico sequencial
   async function getNextAllocationId() {
     const res = await fetch("http://localhost:3000/allocations");
     const allocations = await res.json();
@@ -245,34 +244,33 @@
       ...allocations.map(a => Number(a.id)).filter(n => !isNaN(n)),
       0
     );
-    return maxId + 1;
+    return String(maxId + 1); // <-- devolve sempre string
   }
 
   // --- Troca TEÓRICO ---
   if (tShiftId) {
-    // Busca allocations e shifts atualizados do backend
     let resAlloc = await fetch("http://localhost:3000/allocations");
     let allocations = await resAlloc.json();
     let resShifts = await fetch("http://localhost:3000/shifts");
     let shifts = await resShifts.json();
 
-    // Só remove allocations do mesmo tipo (T) e da mesma cadeira
-    const oldTAllocations = allocations.filter((a) => {
+    // Elimina todas as allocations antigas deste aluno/curso/type
+    const toDelete = allocations.filter(a => {
       if (Number(a.studentId) !== Number(this.alunoParaEditar.id)) return false;
       const shift = shifts.find(s => Number(s.id) === Number(a.shiftId));
       return shift && shift.type === 'T' && Number(shift.courseId) === Number(this.course.id);
     });
-    for (const alloc of oldTAllocations) {
+    for (const alloc of toDelete) {
       await fetch(`http://localhost:3000/allocations/${alloc.id}`, { method: "DELETE" });
     }
-    // Recarrega allocations do backend para garantir estado atualizado
-    await databaseStore.loadDatabase();
+
+    // Cria nova allocation com id string
     const nextId = await getNextAllocationId();
     await fetch(`http://localhost:3000/allocations`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        id: Number(nextId),
+        id: String(nextId),
         shiftId: Number(tShiftId),
         studentId: Number(this.alunoParaEditar.id)
       })
@@ -281,29 +279,28 @@
 
   // --- Troca PRÁTICO ---
   if (plShiftId) {
-    // Busca allocations e shifts atualizados do backend
     let resAlloc = await fetch("http://localhost:3000/allocations");
     let allocations = await resAlloc.json();
     let resShifts = await fetch("http://localhost:3000/shifts");
     let shifts = await resShifts.json();
 
-    // Só remove allocations do mesmo tipo (PL/TP) e da mesma cadeira
-    const oldPLAllocations = allocations.filter((a) => {
+    // Elimina todas as allocations antigas deste aluno/curso/type
+    const toDelete = allocations.filter(a => {
       if (Number(a.studentId) !== Number(this.alunoParaEditar.id)) return false;
       const shift = shifts.find(s => Number(s.id) === Number(a.shiftId));
       return shift && (shift.type === 'PL' || shift.type === 'TP') && Number(shift.courseId) === Number(this.course.id);
     });
-    for (const alloc of oldPLAllocations) {
+    for (const alloc of toDelete) {
       await fetch(`http://localhost:3000/allocations/${alloc.id}`, { method: "DELETE" });
     }
-    // Recarrega allocations do backend para garantir estado atualizado
-    await databaseStore.loadDatabase();
+
+    // Cria nova allocation com id string
     const nextId = await getNextAllocationId();
     await fetch(`http://localhost:3000/allocations`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        id: Number(nextId),
+        id: String(nextId),
         shiftId: Number(plShiftId),
         studentId: Number(this.alunoParaEditar.id)
       })

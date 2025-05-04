@@ -3,9 +3,9 @@
       <div class="modal">
         <img class="profile-img" :src="studentImg" alt="Foto do aluno" />
         <div class="student-info">
-          <div class="student-name">{{ aluno.name }} - {{ aluno.studentNumber }}</div>
-          <div class="student-course">{{ aluno.year }}ºAno - {{ aluno.degree }}</div>
-        </div>
+        <div class="student-name">{{ aluno.name }} </div>
+        <div class="student-course">{{ aluno.email }} </div>
+      </div>
         <div class="turno-select">
           <label><b>Teórico:</b></label>
           <select v-model="selectedTShiftId">

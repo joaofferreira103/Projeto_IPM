@@ -668,7 +668,7 @@
     {
       "id": "1",
       "courseId": 1,
-      "classroomId": "5",
+      "classroomId": "1",
       "day": "Monday",
       "from": 10,
       "to": 12,
@@ -1400,7 +1400,7 @@
     {
       "id": "62",
       "courseId": 1,
-      "classroomId": 5,
+      "classroomId": "4",
       "day": "Friday",
       "from": 14,
       "to": 16,
@@ -2072,11 +2072,6 @@
       "studentId": 24
     },
     {
-      "id": "157",
-      "shiftId": 2,
-      "studentId": 26
-    },
-    {
       "id": "158",
       "shiftId": 2,
       "studentId": 27
@@ -2157,29 +2152,24 @@
       "studentId": 1
     },
     {
-      "id": 194,
+      "id": "215",
       "shiftId": 1,
       "studentId": 1
     },
     {
-      "id": 195,
-      "shiftId": 2,
+      "id": "216",
+      "shiftId": 62,
       "studentId": 1
     },
     {
-      "id": 196,
+      "id": "217",
       "shiftId": 61,
-      "studentId": 1
+      "studentId": 26
     },
     {
-      "id": 197,
-      "shiftId": 1,
-      "studentId": 1
-    },
-    {
-      "id": 198,
-      "shiftId": 2,
-      "studentId": 1
+      "id": "218",
+      "shiftId": 62,
+      "studentId": 26
     }
   ],
   "conflicts": [
