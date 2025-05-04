@@ -86,6 +86,12 @@ const routes = [
     name: "ScheduleHomePage",
     component: ScheduleHomePage,
   },
+  {
+    path: "/novo-pedido-troca",
+    name: "ShiftRequestPage",
+    component: () => import("@/views/ShiftRequestPage.vue"),
+    meta: { requiresAuth: true, role: "student" },
+  }
 ];
 
 const router = createRouter({

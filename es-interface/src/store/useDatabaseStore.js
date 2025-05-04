@@ -68,10 +68,10 @@ export const useDatabaseStore = defineStore("database", {
         console.log("Dados carregados:", {
           courses,
           shifts,
-          allocations : this.allocations,
-          students : this.students,
-          classrooms : this.classrooms,
-          buildings : this.buildings,
+          allocations: this.allocations,
+          students: this.students,
+          classrooms: this.classrooms,
+          buildings: this.buildings,
         });
       } catch (error) {
         console.error("Erro ao carregar os dados do servidor:", error);
@@ -85,6 +85,22 @@ export const useDatabaseStore = defineStore("database", {
       console.log("ShiftRequests:", this.shiftRequests);
       if (!this.user) return [];
 
+      // Função auxiliar para formatar data como dd/mm/aaaa
+      const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+          // Se a data já estiver no formato dd/mm/aaaa, retorna como está
+          if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) {
+            return dateString;
+          }
+          // Caso contrário, usa a data atual
+          const today = new Date();
+          return `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+        }
+        // Usa 'date' em vez de 'today' para a formatação
+        return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+      };
+
       let requests = [];
       if (this.user.role === "student") {
         requests = this.shiftRequests
@@ -93,7 +109,7 @@ export const useDatabaseStore = defineStore("database", {
             sender: this.students.find((s) => String(s.id) === String(request.studentId))?.name || "Desconhecido",
             type: "Troca de Turno",
             subject: `Turno ${request.shiftId}`,
-            date: request.createdAt || new Date().toLocaleDateString("pt-PT"),
+            date: formatDate(request.createdAt),
             isWarning: request.responseSeenByStudent === false,
           }));
       } else if (this.user.role === "teacher") {
@@ -103,7 +119,7 @@ export const useDatabaseStore = defineStore("database", {
             sender: this.teachers.find((t) => String(t.id) === String(request.teacherId))?.name || "Desconhecido",
             type: "Reserva de Sala",
             subject: `Sala ${request.classroomId}`,
-            date: request.createdAt || new Date().toLocaleDateString("pt-PT"),
+            date: formatDate(request.createdAt),
             isWarning: request.responseSeenByTeacher === false,
           }));
       } else if (this.user.role === "director") {
@@ -114,7 +130,7 @@ export const useDatabaseStore = defineStore("database", {
               sender: this.students.find((s) => String(s.id) === String(request.studentId))?.name || "Desconhecido",
               type: "Troca de Turno",
               subject: `Turno ${request.shiftId}`,
-              date: request.createdAt || new Date().toLocaleDateString("pt-PT"),
+              date: formatDate(request.createdAt),
               isWarning: request.responseSeenByStudent === false,
             })),
           ...this.classroomRequests
@@ -123,7 +139,7 @@ export const useDatabaseStore = defineStore("database", {
               sender: this.teachers.find((t) => String(t.id) === String(request.teacherId))?.name || "Desconhecido",
               type: "Reserva de Sala",
               subject: `Sala ${request.classroomId}`,
-              date: request.createdAt || new Date().toLocaleDateString("pt-PT"),
+              date: formatDate(request.createdAt),
               isWarning: request.responseSeenByTeacher === false,
             })),
         ];
@@ -143,6 +159,11 @@ export const useDatabaseStore = defineStore("database", {
       return course;
     },
     getCourseByDegree: (state) => (degreeId) => state.courses.filter((course) => String(course.degreeId) === String(degreeId)),
-    getShiftsByCourse: (state) => (courseId) => state.shifts.filter((shift) => String(shift.courseId) === String(courseId)),
+    getShiftsByCourse: (state) => (courseId) => {
+      console.log("getShiftsByCourse chamado com courseId:", courseId);
+      const shifts = state.shifts.filter((shift) => String(shift.courseId) === String(courseId));
+      console.log("Turnos encontrados para courseId", courseId, ":", shifts);
+      return shifts;
+    },
   },
 });
