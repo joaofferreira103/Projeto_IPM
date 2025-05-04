@@ -80,20 +80,69 @@ export const useDatabaseStore = defineStore("database", {
       }
     },
     filterRequests() {
-      return this.classroomRequests.filter((request) => request.status === "pending");
+      console.log("User:", this.user);
+      console.log("ClassroomRequests:", this.classroomRequests);
+      console.log("ShiftRequests:", this.shiftRequests);
+      if (!this.user) return [];
+
+      let requests = [];
+      if (this.user.role === "student") {
+        requests = this.shiftRequests
+          .filter((request) => String(request.studentId) === String(this.user.id) && (!request.status || request.status === "pending"))
+          .map((request) => ({
+            sender: this.students.find((s) => String(s.id) === String(request.studentId))?.name || "Desconhecido",
+            type: "Troca de Turno",
+            subject: `Turno ${request.shiftId}`,
+            date: request.createdAt || new Date().toLocaleDateString("pt-PT"),
+            isWarning: request.responseSeenByStudent === false,
+          }));
+      } else if (this.user.role === "teacher") {
+        requests = this.classroomRequests
+          .filter((request) => String(request.teacherId) === String(this.user.id) && (!request.status || request.status === "pending"))
+          .map((request) => ({
+            sender: this.teachers.find((t) => String(t.id) === String(request.teacherId))?.name || "Desconhecido",
+            type: "Reserva de Sala",
+            subject: `Sala ${request.classroomId}`,
+            date: request.createdAt || new Date().toLocaleDateString("pt-PT"),
+            isWarning: request.responseSeenByTeacher === false,
+          }));
+      } else if (this.user.role === "director") {
+        requests = [
+          ...this.shiftRequests
+            .filter((request) => !request.status || request.status === "pending")
+            .map((request) => ({
+              sender: this.students.find((s) => String(s.id) === String(request.studentId))?.name || "Desconhecido",
+              type: "Troca de Turno",
+              subject: `Turno ${request.shiftId}`,
+              date: request.createdAt || new Date().toLocaleDateString("pt-PT"),
+              isWarning: request.responseSeenByStudent === false,
+            })),
+          ...this.classroomRequests
+            .filter((request) => !request.status || request.status === "pending")
+            .map((request) => ({
+              sender: this.teachers.find((t) => String(t.id) === String(request.teacherId))?.name || "Desconhecido",
+              type: "Reserva de Sala",
+              subject: `Sala ${request.classroomId}`,
+              date: request.createdAt || new Date().toLocaleDateString("pt-PT"),
+              isWarning: request.responseSeenByTeacher === false,
+            })),
+        ];
+      }
+      console.log("Filtered Requests:", requests);
+      return requests;
     },
   },
   getters: {
-    getStudentById: (state) => (id) => state.students.find((student) => student.id === id),
-    getTeacherById: (state) => (id) => state.teachers.find((teacher) => teacher.id === id),
-    getDirectorById: (state) => (id) => state.directors.find((director) => director.id === id),
+    getStudentById: (state) => (id) => state.students.find((student) => String(student.id) === String(id)),
+    getTeacherById: (state) => (id) => state.teachers.find((teacher) => String(teacher.id) === String(id)),
+    getDirectorById: (state) => (id) => state.directors.find((director) => String(director.id) === String(id)),
     getCourseById: (state) => (id) => {
       console.log("Procurando curso com ID:", id);
-      const course = state.courses.find((course) => course.id === id.toString());
+      const course = state.courses.find((course) => String(course.id) === String(id));
       console.log("Curso encontrado:", course);
       return course;
     },
-    getCourseByDegree: (state) => (degreeId) => state.courses.filter((course) => course.degreeId === degreeId),
-    getShiftsByCourse: (state) => (courseId) => state.shifts.filter((shift) => shift.courseId === courseId),
+    getCourseByDegree: (state) => (degreeId) => state.courses.filter((course) => String(course.degreeId) === String(degreeId)),
+    getShiftsByCourse: (state) => (courseId) => state.shifts.filter((shift) => String(shift.courseId) === String(courseId)),
   },
 });
