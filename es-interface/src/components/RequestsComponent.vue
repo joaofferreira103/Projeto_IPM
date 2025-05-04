@@ -50,7 +50,10 @@
             Nenhum pedido encontrado.
           </div>
         </div>
-        <div class="ver-anteriores-wrapper">
+        <div class="requests-actions">
+          <router-link v-if="isStudent" to="/novo-pedido-troca" class="novo-pedido-btn">
+            Novo Pedido de Troca
+          </router-link>
           <button class="ver-anteriores-btn" disabled>Ver pedidos anteriores</button>
         </div>
       </div>
@@ -87,10 +90,14 @@ export default {
       foto: require("@/assets/images/icon_person.png"), // Use dynamic photo if available
     }));
     
+    // Check if the user is a student
+    const isStudent = databaseStore.user?.role === "student";
+    
     console.log("Pedidos:", pedidos);
     
     return {
       pedidos,
+      isStudent,
     };
   },
   methods: {
@@ -216,10 +223,11 @@ export default {
   margin-left: 8px;
 }
 
-.ver-anteriores-wrapper {
+.requests-actions {
   display: flex;
   justify-content: flex-end;
   margin-top: 18px;
+  gap: 12px;
 }
 
 .ver-anteriores-btn {
@@ -232,6 +240,24 @@ export default {
   padding: 8px 28px;
   cursor: not-allowed;
   opacity: 0.9;
+}
+
+.novo-pedido-btn {
+  background: #3a2658;
+  color: #fff;
+  font-family: "Istok Web-Regular", Helvetica;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 28px;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.novo-pedido-btn:hover {
+  background: #5a3b7a;
 }
 
 .voltar {
