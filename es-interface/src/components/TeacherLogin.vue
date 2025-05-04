@@ -58,38 +58,37 @@ export default {
   },
   methods: {
     handleLogin() {
-      const databaseStore = useDatabaseStore();
+  const databaseStore = useDatabaseStore();
 
-      // Certifique-se de que os dados foram carregados na store
-      if (!databaseStore.teachers || databaseStore.teachers.length === 0) {
-        databaseStore.loadDatabase();
-      }
+  // Certifique-se de que os dados foram carregados na store
+  if (!databaseStore.teachers || databaseStore.teachers.length === 0) {
+    databaseStore.loadDatabase();
+  }
 
-       // Verifica se o utilizador é um professor
-       const teacher = databaseStore.teachers.find(
-        (t) => t.email === this.username.trim() && t.password === this.password.trim()
-      );
+  console.log("Professores carregados:", databaseStore.teachers);
+  console.log("Diretores carregados:", databaseStore.directors);
 
-      // Verifica se o utilizador é o diretor
-      const director = databaseStore.directors.find((d) => d.email === this.username.trim());
-      const isDirector = director && director.password === this.password.trim();
+  // Verifica se o utilizador é um professor
+  const teacher = databaseStore.teachers.find(
+    (t) => t.email === this.username.trim() && t.password === this.password.trim()
+  );
 
-      if (teacher) {
-        // Define o utilizador como professor na store
-        databaseStore.user = { name: teacher.name, role: "teacher", id: teacher.id };
+  // Verifica se o utilizador é o diretor
+  const director = databaseStore.directors.find((d) => d.email === this.username.trim());
+  const isDirector = director && director.password === this.password.trim();
 
-        alert(`Bem-vindo, ${teacher.name}`);
-        this.$router.push("/dc-logado");
-      } else if (isDirector) {
-        // Define o utilizador como diretor na store
-        databaseStore.user = { name: director.name, role: "director", id: director.id };
-
-        alert(`Bem-vindo, ${director.name}`);
-        this.$router.push("/dc-logado");
-      } else {
-        alert("Credenciais inválidas. Por favor, tente novamente.");
-      }
-    },
+  if (teacher) {
+    databaseStore.user = { name: teacher.name, role: "teacher", id: teacher.id };
+    alert(`Bem-vindo, ${teacher.name}`);
+    this.$router.push("/dc-logado");
+  } else if (isDirector) {
+    databaseStore.user = { name: director.name, role: "director", id: director.id };
+    alert(`Bem-vindo, ${director.name}`);
+    this.$router.push("/dc-logado");
+  } else {
+    alert("Credenciais inválidas. Por favor, tente novamente.");
+  }
+},
     clearForm() {
       this.username = "";
       this.password = "";

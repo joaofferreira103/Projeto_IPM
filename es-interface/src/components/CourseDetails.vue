@@ -84,66 +84,71 @@
       this.loadCourse();
     },
     methods: {
-      loadCourse() {
-        const databaseStore = useDatabaseStore();
-  
-        // Certifique-se de que os dados foram carregados
-        if (!databaseStore.courses.length) {
-          databaseStore.loadDatabase();
-        }
-  
-        const courseId = parseInt(this.$route.params.id);
-        this.course = databaseStore.getCourseById(courseId);
-        this.shifts = databaseStore.getShiftsByCourse(courseId);
-  
-        // Define o primeiro turno como selecionado por padrão
-        if (this.shifts.length > 0) {
-          this.selectedShiftId = this.shifts[0].id;
-        }
-  
-        // Busca os alunos associados aos turnos da unidade curricular
-        const shiftIds = this.shifts.map((shift) => shift.id);
-        const allocations = databaseStore.allocations.filter((allocation) =>
-          shiftIds.includes(allocation.shiftId)
-        );
-        const studentIds = allocations.map((allocation) => allocation.studentId);
-        this.students = databaseStore.students.filter((student) =>
-          studentIds.includes(student.id)
-        );
-  
-        if (!this.course) {
-          alert("Unidade Curricular não encontrada!");
-          this.$router.push("/horarios");
-        }
-      },
-      getStudentsByShift(shiftId) {
-        const databaseStore = useDatabaseStore();
-        const allocations = databaseStore.allocations.filter(
-          (allocation) => allocation.shiftId === shiftId
-        );
-        const studentIds = allocations.map((allocation) => allocation.studentId);
-        return databaseStore.students.filter((student) =>
-          studentIds.includes(student.id)
-        );
-      },
-      getClassroomName(classroomId) {
-        const databaseStore = useDatabaseStore();
-        const classroom = databaseStore.classrooms.find(
-          (classroom) => classroom.id === classroomId
-        );
-        if (!classroom) return "Desconhecida";
-  
-        const building = databaseStore.buildings.find(
-          (building) => building.id === classroom.buildingId
-        );
-        const buildingName = building ? building.name : "Edifício Desconhecido";
-  
-        return `${classroom.name} (${buildingName})`;
-      },
-      selectShift(shiftId) {
-        this.selectedShiftId = shiftId; // Atualiza o turno selecionado
-      },
-    },
+  selectShift(shiftId) {
+    this.selectedShiftId = shiftId;
+  },
+  loadCourse() {
+    const databaseStore = useDatabaseStore();
+    
+    // Certifique-se de que os dados foram carregados
+    if (!databaseStore.courses.length || !databaseStore.classrooms.length) {
+      databaseStore.loadDatabase().then(() => {
+        this._loadCourseData(databaseStore);
+      });
+    } else {
+      this._loadCourseData(databaseStore);
+    }
+  },
+  _loadCourseData(databaseStore) {
+    const courseId = parseInt(this.$route.params.id);
+    this.course = databaseStore.getCourseById(courseId);
+    this.shifts = databaseStore.getShiftsByCourse(courseId);
+
+    // Define o primeiro turno como selecionado por padrão
+    if (this.shifts.length > 0) {
+      this.selectedShiftId = this.shifts[0].id;
+    }
+
+    if (!this.course) {
+      alert("Unidade Curricular não encontrada!");
+      this.$router.push("/horarios");
+    }
+  },
+  getStudentsByShift(shiftId) {
+  const databaseStore = useDatabaseStore();
+
+  // Filtra as alocações para o turno selecionado
+  const allocations = databaseStore.allocations.filter(
+    (allocation) => Number(allocation.shiftId) === Number(shiftId)
+  );
+
+  // Extrai os IDs dos alunos dessas alocações
+  const studentIds = allocations.map((allocation) => Number(allocation.studentId));
+
+  // Retorna os alunos cujos IDs estão nas alocações
+  return databaseStore.students.filter((student) =>
+    studentIds.includes(Number(student.id))
+  );
+},
+  getClassroomName(classroomId) {
+    const databaseStore = useDatabaseStore();
+    
+    // Converte IDs para string para garantir comparação correta
+    const classroom = databaseStore.classrooms.find(
+      (classroom) => String(classroom.id) === String(classroomId)
+    );
+    
+    if (!classroom) return "Desconhecida";
+
+    const building = databaseStore.buildings.find(
+      (building) => String(building.id) === String(classroom.buildingId)
+    );
+    
+    const buildingName = building ? building.name : "Edifício Desconhecido";
+
+    return `${classroom.name} (${buildingName})`;
+  }
+}
   };
   </script>
   
