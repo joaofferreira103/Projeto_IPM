@@ -20,6 +20,16 @@
               >
                 <h3>{{ turno.type }} {{ turno.name }}</h3>
                 <p><b>Sala:</b> {{ getClassroomName(turno.classroomId) }}</p>
+                <button v-if="editTurnoId !== turno.id" @click.stop="editTurnoId = turno.id">Editar</button>
+                <div v-if="editTurnoId === turno.id">
+                  <select v-model="turno.classroomId">
+                    <option v-for="sala in classrooms" :key="sala.id" :value="sala.id">
+                      {{ sala.name }} ({{ getBuildingName(sala.buildingId) }})
+                    </option>
+                  </select>
+                  <button @click.stop="guardarSala(turno)">Guardar</button>
+                  <button @click.stop="cancelarEdicao">Cancelar</button>
+                </div>
                 <p><b>Horário:</b> {{ turno.day }} {{ turno.from }}:00 - {{ turno.to }}:00</p>
                 <p><b>Alunos:</b> {{ getStudentsByShift(turno.id).length }}</p>
               </div>
@@ -67,88 +77,103 @@
         course: null,
         shifts: [],
         students: [],
-        selectedShiftId: null, // ID do turno selecionado
+        classrooms: [],
+        selectedShiftId: null,
+        editTurnoId: null, // ID do turno em edição
       };
     },
     computed: {
       studentsBySelectedShift() {
-        // Retorna os alunos do turno selecionado
         if (!this.selectedShiftId) return [];
         return this.getStudentsByShift(this.selectedShiftId);
       },
     },
     watch: {
-      "$route.params.id": "loadCourse", // Recarrega os dados se o ID da rota mudar
+      "$route.params.id": "loadCourse",
     },
     mounted() {
       this.loadCourse();
     },
     methods: {
-  selectShift(shiftId) {
-    this.selectedShiftId = shiftId;
-  },
-  loadCourse() {
-    const databaseStore = useDatabaseStore();
-    
-    // Certifique-se de que os dados foram carregados
-    if (!databaseStore.courses.length || !databaseStore.classrooms.length) {
-      databaseStore.loadDatabase().then(() => {
-        this._loadCourseData(databaseStore);
-      });
-    } else {
-      this._loadCourseData(databaseStore);
-    }
-  },
-  _loadCourseData(databaseStore) {
-    const courseId = parseInt(this.$route.params.id);
-    this.course = databaseStore.getCourseById(courseId);
-    this.shifts = databaseStore.getShiftsByCourse(courseId);
-
-    // Define o primeiro turno como selecionado por padrão
-    if (this.shifts.length > 0) {
-      this.selectedShiftId = this.shifts[0].id;
-    }
-
-    if (!this.course) {
-      alert("Unidade Curricular não encontrada!");
-      this.$router.push("/horarios");
-    }
-  },
-  getStudentsByShift(shiftId) {
-  const databaseStore = useDatabaseStore();
-
-  // Filtra as alocações para o turno selecionado
-  const allocations = databaseStore.allocations.filter(
-    (allocation) => Number(allocation.shiftId) === Number(shiftId)
-  );
-
-  // Extrai os IDs dos alunos dessas alocações
-  const studentIds = allocations.map((allocation) => Number(allocation.studentId));
-
-  // Retorna os alunos cujos IDs estão nas alocações
-  return databaseStore.students.filter((student) =>
-    studentIds.includes(Number(student.id))
-  );
-},
-  getClassroomName(classroomId) {
-    const databaseStore = useDatabaseStore();
-    
-    // Converte IDs para string para garantir comparação correta
-    const classroom = databaseStore.classrooms.find(
-      (classroom) => String(classroom.id) === String(classroomId)
-    );
-    
-    if (!classroom) return "Desconhecida";
-
-    const building = databaseStore.buildings.find(
-      (building) => String(building.id) === String(classroom.buildingId)
-    );
-    
-    const buildingName = building ? building.name : "Edifício Desconhecido";
-
-    return `${classroom.name} (${buildingName})`;
-  }
-}
+      selectShift(shiftId) {
+        this.selectedShiftId = shiftId;
+      },
+      loadCourse() {
+        const databaseStore = useDatabaseStore();
+        if (
+          !databaseStore.courses.length ||
+          !databaseStore.classrooms.length ||
+          !databaseStore.shifts.length
+        ) {
+          databaseStore.loadDatabase().then(() => {
+            this._loadCourseData(databaseStore);
+          });
+        } else {
+          this._loadCourseData(databaseStore);
+        }
+      },
+      _loadCourseData(databaseStore) {
+        const courseId = parseInt(this.$route.params.id);
+        this.course = databaseStore.getCourseById(courseId);
+        this.shifts = databaseStore.getShiftsByCourse(courseId);
+        this.classrooms = databaseStore.classrooms;
+        if (this.shifts.length > 0) {
+          this.selectedShiftId = this.shifts[0].id;
+        }
+        if (!this.course) {
+          alert("Unidade Curricular não encontrada!");
+          this.$router.push("/horarios");
+        }
+      },
+      getStudentsByShift(shiftId) {
+        const databaseStore = useDatabaseStore();
+        const allocations = databaseStore.allocations.filter(
+          (allocation) => Number(allocation.shiftId) === Number(shiftId)
+        );
+        const studentIds = allocations.map((allocation) => Number(allocation.studentId));
+        return databaseStore.students.filter((student) =>
+          studentIds.includes(Number(student.id))
+        );
+      },
+      getClassroomName(classroomId) {
+        const databaseStore = useDatabaseStore();
+        const classroom = databaseStore.classrooms.find(
+          (classroom) => String(classroom.id) === String(classroomId)
+        );
+        if (!classroom) return "Desconhecida";
+        const building = databaseStore.buildings.find(
+          (building) => String(building.id) === String(classroom.buildingId)
+        );
+        const buildingName = building ? building.name : "Edifício Desconhecido";
+        return `${classroom.name} (${buildingName})`;
+      },
+      async guardarSala(turno) {
+        try {
+          const response = await fetch(`http://localhost:3000/shifts/${turno.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ classroomId: turno.classroomId }),
+          });
+          if (!response.ok) throw new Error("Erro ao atualizar sala!");
+          alert("Sala atualizada com sucesso!");
+          this.editTurnoId = null;
+        } catch (e) {
+          alert("Erro ao atualizar sala!");
+        }
+      },
+      getBuildingName(buildingId) {
+        const databaseStore = useDatabaseStore();
+        const building = databaseStore.buildings.find(
+            (b) => String(b.id) === String(buildingId)
+        );
+        return building ? building.name : "Edifício Desconhecido";
+        },
+      cancelarEdicao() {
+        this.editTurnoId = null;
+        // Opcional: recarregar os dados do turno para desfazer alterações locais
+        this.loadCourse();
+      },
+    },
   };
   </script>
   
@@ -159,7 +184,6 @@
     background-size: cover;
     padding-top: 8.69vh;
   }
-  
   .course-content {
     max-width: 1400px;
     margin: 0 auto;
@@ -168,43 +192,36 @@
     flex-direction: column;
     gap: 32px;
   }
-  
   .course-header {
     display: flex;
     align-items: center;
     gap: 20px;
   }
-  
   .icon-course {
     width: 60px;
     height: 60px;
   }
-  
   .course-title {
     font-size: 2.5rem;
     color: #3a2658;
     font-family: "Istok Web-Regular", Helvetica;
   }
-  
   .course-body {
     display: flex;
     flex-direction: column;
     gap: 40px;
   }
-  
   .turnos-section,
   .alunos-section {
     background: #d4b1df;
     border-radius: 20px;
     padding: 20px;
   }
-  
   .turnos-list {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
   }
-  
   .turno-card {
     background: #fff;
     border-radius: 10px;
@@ -214,44 +231,36 @@
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
   }
-  
   .turno-card:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
-  
   .turno-card.active {
     border: 2px solid #3a2658;
   }
-  
   .alunos-table {
     width: 100%;
     border-collapse: collapse;
   }
-  
   .alunos-table th,
   .alunos-table td {
     border: 1px solid #3a2658;
     padding: 10px;
     text-align: left;
   }
-  
   .alunos-table th {
     background: #3a2658;
     color: #fff;
   }
-  
   .voltar {
     text-align: center;
     margin-top: 20px;
   }
-  
   .voltar a {
     color: #3a2658;
     text-decoration: none;
     font-size: 1.2rem;
   }
-  
   .voltar a:hover {
     text-decoration: underline;
   }
