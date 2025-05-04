@@ -19,7 +19,12 @@
                 @click="selectShift(turno.id)"
               >
                 <h3>{{ turno.type }} {{ turno.name }}</h3>
-                <p><b>Sala:</b> {{ getClassroomName(turno.classroomId) }}</p>
+                <p>
+                  <b>Sala:</b> {{ getClassroomName(turno.classroomId) }}
+                  <span v-if="getClassroomCapacity(turno.classroomId) !== 'N/A'">
+                    - Lotação: {{ getClassroomCapacity(turno.classroomId) }}
+                  </span>
+                </p>
                 <button v-if="editTurnoId !== turno.id" @click.stop="editTurnoId = turno.id">Editar</button>
                 <div v-if="editTurnoId === turno.id">
                   <select v-model="turno.classroomId">
@@ -45,6 +50,7 @@
                   <th>Número</th>
                   <th>Nome</th>
                   <th>Observações</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -52,6 +58,9 @@
                   <td>{{ aluno.id }}</td>
                   <td>{{ aluno.name }}</td>
                   <td>{{ aluno.specialStatus ? "Estatuto Especial" : "-" }}</td>
+                  <td>
+                    <button @click="openEditAllocation(aluno)">Editar</button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -59,6 +68,16 @@
         </div>
         <div class="voltar"><a href="#" @click.prevent="$router.back()">Voltar</a></div>
       </div>
+      <!-- Overlay para editar alocação -->
+      <EditAllocationOverlay
+        v-if="showEditOverlay"
+        :aluno="alunoParaEditar"
+        :shifts="shifts"
+        :currentTShiftId="getCurrentTShiftId(alunoParaEditar)"
+        :currentPLShiftId="getCurrentPLShiftId(alunoParaEditar)"
+        @close="showEditOverlay = false"
+        @save="saveAllocation"
+        />
     </div>
     <div v-else>
       <p>Carregando dados...</p>
@@ -67,11 +86,12 @@
   
   <script>
   import Header from "@/components/HeaderComponent.vue";
+  import EditAllocationOverlay from "@/components/EditAllocationOverlay.vue";
   import { useDatabaseStore } from "@/store/useDatabaseStore";
   
   export default {
     name: "CourseDetails",
-    components: { Header },
+    components: { Header, EditAllocationOverlay },
     data() {
       return {
         course: null,
@@ -79,7 +99,9 @@
         students: [],
         classrooms: [],
         selectedShiftId: null,
-        editTurnoId: null, // ID do turno em edição
+        editTurnoId: null,
+        showEditOverlay: false,
+        alunoParaEditar: null,
       };
     },
     computed: {
@@ -147,6 +169,31 @@
         const buildingName = building ? building.name : "Edifício Desconhecido";
         return `${classroom.name} (${buildingName})`;
       },
+      getClassroomCapacity(classroomId) {
+        const databaseStore = useDatabaseStore();
+        const classroom = databaseStore.classrooms.find(
+          (classroom) => String(classroom.id) === String(classroomId)
+        );
+        return classroom && classroom.capacity ? classroom.capacity : "N/A";
+      },
+      getCurrentTShiftId(aluno) {
+        const databaseStore = useDatabaseStore();
+        const allocation = databaseStore.allocations.find(
+            (a) =>
+            Number(a.studentId) === Number(aluno.id) &&
+            databaseStore.shifts.find(s => s.id === a.shiftId && s.type === 'T')
+        );
+        return allocation ? allocation.shiftId : null;
+        },
+        getCurrentPLShiftId(aluno) {
+        const databaseStore = useDatabaseStore();
+        const allocation = databaseStore.allocations.find(
+            (a) =>
+            Number(a.studentId) === Number(aluno.id) &&
+            databaseStore.shifts.find(s => s.id === a.shiftId && (s.type === 'PL' || s.type === 'TP'))
+        );
+        return allocation ? allocation.shiftId : null;
+        },
       async guardarSala(turno) {
         try {
           const response = await fetch(`http://localhost:3000/shifts/${turno.id}`, {
@@ -164,16 +211,73 @@
       getBuildingName(buildingId) {
         const databaseStore = useDatabaseStore();
         const building = databaseStore.buildings.find(
-            (b) => String(b.id) === String(buildingId)
+          (b) => String(b.id) === String(buildingId)
         );
         return building ? building.name : "Edifício Desconhecido";
-        },
+      },
       cancelarEdicao() {
         this.editTurnoId = null;
-        // Opcional: recarregar os dados do turno para desfazer alterações locais
         this.loadCourse();
       },
+      openEditAllocation(aluno) {
+        this.alunoParaEditar = aluno;
+        this.showEditOverlay = true;
+      },
+      getCurrentShiftId(aluno) {
+        const databaseStore = useDatabaseStore();
+        const allocation = databaseStore.allocations.find(
+          (a) => Number(a.studentId) === Number(aluno.id)
+        );
+        return allocation ? allocation.shiftId : null;
+      },
+      async saveAllocation({ tShiftId, plShiftId }) {
+  const databaseStore = useDatabaseStore();
+
+  // --- Troca TEÓRICO ---
+  if (tShiftId) {
+    // Remove TODAS as allocations antigas do tipo T para este aluno
+    const oldTAllocations = databaseStore.allocations.filter(
+      (a) =>
+        Number(a.studentId) === Number(this.alunoParaEditar.id) &&
+        databaseStore.shifts.find(s => String(s.id) === String(a.shiftId) && s.type === 'T')
+    );
+    for (const alloc of oldTAllocations) {
+      await fetch(`http://localhost:3000/allocations/${alloc.id}`, { method: "DELETE" });
+    }
+    // Cria nova allocation
+    await fetch(`http://localhost:3000/allocations`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ shiftId: tShiftId, studentId: this.alunoParaEditar.id })
+    });
+  }
+
+  // --- Troca PRÁTICO ---
+  if (plShiftId) {
+    // Remove TODAS as allocations antigas do tipo PL/TP para este aluno
+    const oldPLAllocations = databaseStore.allocations.filter(
+      (a) =>
+        Number(a.studentId) === Number(this.alunoParaEditar.id) &&
+        databaseStore.shifts.find(s => String(s.id) === String(a.shiftId) && (s.type === 'PL' || s.type === 'TP'))
+    );
+    for (const alloc of oldPLAllocations) {
+      await fetch(`http://localhost:3000/allocations/${alloc.id}`, { method: "DELETE" });
+    }
+    // Cria nova allocation
+    await fetch(`http://localhost:3000/allocations`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ shiftId: plShiftId, studentId: this.alunoParaEditar.id })
+    });
+  }
+
+  // Recarrega os dados para atualizar a interface
+  await databaseStore.loadDatabase();
+  this.showEditOverlay = false;
+  this.alunoParaEditar = null;
+}
     },
+  
   };
   </script>
   

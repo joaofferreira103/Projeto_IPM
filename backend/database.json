@@ -680,7 +680,7 @@
     {
       "id": "2",
       "courseId": 1,
-      "classroomId": "4",
+      "classroomId": "1",
       "day": "Tuesday",
       "from": 14,
       "to": 16,
@@ -908,7 +908,7 @@
     {
       "id": "21",
       "courseId": 11,
-      "classroomId": 1,
+      "classroomId": "5",
       "day": "Monday",
       "from": 10,
       "to": 12,
@@ -1384,32 +1384,41 @@
       "name": "PL1",
       "teacherId": 5,
       "totalStudentsRegistered": 10
+    },
+    {
+      "id": "61",
+      "courseId": 1,
+      "classroomId": 2,
+      "day": "Thursday",
+      "from": 10,
+      "to": 12,
+      "type": "T",
+      "name": "T2",
+      "teacherId": 1,
+      "totalStudentsRegistered": 10
+    },
+    {
+      "id": "62",
+      "courseId": 1,
+      "classroomId": 5,
+      "day": "Friday",
+      "from": 14,
+      "to": 16,
+      "type": "PL",
+      "name": "PL2",
+      "teacherId": 1,
+      "totalStudentsRegistered": 10
     }
   ],
   "allocations": [
-    {
-      "id": "1",
-      "shiftId": 1,
-      "studentId": 1
-    },
     {
       "id": "2",
       "shiftId": 2,
       "studentId": 1
     },
     {
-      "id": "3",
-      "shiftId": 3,
-      "studentId": 1
-    },
-    {
       "id": "4",
       "shiftId": 4,
-      "studentId": 1
-    },
-    {
-      "id": "5",
-      "shiftId": 5,
       "studentId": 1
     },
     {
@@ -1686,31 +1695,6 @@
       "id": "60",
       "shiftId": 60,
       "studentId": 12
-    },
-    {
-      "id": "61",
-      "shiftId": 1,
-      "studentId": 13
-    },
-    {
-      "id": "62",
-      "shiftId": 2,
-      "studentId": 13
-    },
-    {
-      "id": "63",
-      "shiftId": 3,
-      "studentId": 13
-    },
-    {
-      "id": "64",
-      "shiftId": 4,
-      "studentId": 13
-    },
-    {
-      "id": "65",
-      "shiftId": 5,
-      "studentId": 13
     },
     {
       "id": "66",
@@ -1868,18 +1852,8 @@
       "studentId": 20
     },
     {
-      "id": "97",
-      "shiftId": 37,
-      "studentId": 20
-    },
-    {
       "id": "98",
       "shiftId": 38,
-      "studentId": 20
-    },
-    {
-      "id": "99",
-      "shiftId": 39,
       "studentId": 20
     },
     {
@@ -1986,31 +1960,6 @@
       "id": "120",
       "shiftId": 60,
       "studentId": 24
-    },
-    {
-      "id": "121",
-      "shiftId": 1,
-      "studentId": 25
-    },
-    {
-      "id": "122",
-      "shiftId": 2,
-      "studentId": 25
-    },
-    {
-      "id": "123",
-      "shiftId": 3,
-      "studentId": 25
-    },
-    {
-      "id": "124",
-      "shiftId": 4,
-      "studentId": 25
-    },
-    {
-      "id": "125",
-      "shiftId": 5,
-      "studentId": 25
     },
     {
       "id": "126",
@@ -2138,11 +2087,6 @@
       "studentId": 30
     },
     {
-      "id": "151",
-      "shiftId": 1,
-      "studentId": 20
-    },
-    {
       "id": "152",
       "shiftId": 1,
       "studentId": 21
@@ -2163,11 +2107,6 @@
       "studentId": 24
     },
     {
-      "id": "156",
-      "shiftId": 1,
-      "studentId": 25
-    },
-    {
       "id": "157",
       "shiftId": 2,
       "studentId": 26
@@ -2186,6 +2125,36 @@
       "id": "160",
       "shiftId": 2,
       "studentId": 29
+    },
+    {
+      "id": "40c0",
+      "shiftId": "61",
+      "studentId": "13"
+    },
+    {
+      "id": "0570",
+      "shiftId": "62",
+      "studentId": "13"
+    },
+    {
+      "id": "320f",
+      "shiftId": "61",
+      "studentId": "20"
+    },
+    {
+      "id": "941d",
+      "shiftId": "1",
+      "studentId": "1"
+    },
+    {
+      "id": "d6c5",
+      "shiftId": "1",
+      "studentId": "25"
+    },
+    {
+      "id": "8dd6",
+      "shiftId": "62",
+      "studentId": "25"
     }
   ],
   "conflicts": [
@@ -2259,25 +2228,25 @@
     {
       "id": "2",
       "name": "1.02",
-      "capacity": 50,
+      "capacity": 55,
       "buildingId": 1
     },
     {
       "id": "3",
       "name": "1.03",
-      "capacity": 50,
+      "capacity": 35,
       "buildingId": 2
     },
     {
       "id": "4",
       "name": "1.04",
-      "capacity": 50,
+      "capacity": 40,
       "buildingId": 1
     },
     {
       "id": "5",
       "name": "1.05",
-      "capacity": 50,
+      "capacity": 38,
       "buildingId": 3
     }
   ],
