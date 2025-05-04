@@ -60,7 +60,7 @@ export default {
       this.$router.push("/");
     },
     goToDcLogado() {
-      this.$router.push("/dc-logado");
+      this.$router.back();
     },
   },
 };

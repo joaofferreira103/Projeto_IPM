@@ -692,7 +692,7 @@
     {
       "id": "3",
       "courseId": 2,
-      "classroomId": 1,
+      "classroomId": "3",
       "day": "Wednesday",
       "from": 10,
       "to": 12,
@@ -1388,7 +1388,7 @@
     {
       "id": "61",
       "courseId": 1,
-      "classroomId": 2,
+      "classroomId": "2",
       "day": "Thursday",
       "from": 10,
       "to": 12,
@@ -1411,16 +1411,6 @@
     }
   ],
   "allocations": [
-    {
-      "id": "2",
-      "shiftId": 2,
-      "studentId": 1
-    },
-    {
-      "id": "4",
-      "shiftId": 4,
-      "studentId": 1
-    },
     {
       "id": "6",
       "shiftId": 6,
@@ -1445,31 +1435,6 @@
       "id": "10",
       "shiftId": 10,
       "studentId": 2
-    },
-    {
-      "id": "11",
-      "shiftId": 11,
-      "studentId": 3
-    },
-    {
-      "id": "12",
-      "shiftId": 12,
-      "studentId": 3
-    },
-    {
-      "id": "13",
-      "shiftId": 13,
-      "studentId": 3
-    },
-    {
-      "id": "14",
-      "shiftId": 14,
-      "studentId": 3
-    },
-    {
-      "id": "15",
-      "shiftId": 15,
-      "studentId": 3
     },
     {
       "id": "16",
@@ -2132,11 +2097,6 @@
       "studentId": "20"
     },
     {
-      "id": "941d",
-      "shiftId": "1",
-      "studentId": "1"
-    },
-    {
       "id": "d6c5",
       "shiftId": "1",
       "studentId": "25"
@@ -2155,6 +2115,56 @@
       "id": "17ef",
       "shiftId": "2",
       "studentId": "13"
+    },
+    {
+      "id": "170",
+      "shiftId": 61,
+      "studentId": 14
+    },
+    {
+      "id": "171",
+      "shiftId": 62,
+      "studentId": 4
+    },
+    {
+      "id": "177",
+      "shiftId": 11,
+      "studentId": 3
+    },
+    {
+      "id": "178",
+      "shiftId": 12,
+      "studentId": 3
+    },
+    {
+      "id": "179",
+      "shiftId": 7,
+      "studentId": 1
+    },
+    {
+      "id": "180",
+      "shiftId": 8,
+      "studentId": 1
+    },
+    {
+      "id": "181",
+      "shiftId": 12,
+      "studentId": 1
+    },
+    {
+      "id": "182",
+      "shiftId": 5,
+      "studentId": 1
+    },
+    {
+      "id": 183,
+      "shiftId": 61,
+      "studentId": 1
+    },
+    {
+      "id": 184,
+      "shiftId": 62,
+      "studentId": 1
     }
   ],
   "conflicts": [

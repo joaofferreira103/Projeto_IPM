@@ -23,7 +23,7 @@
               </p>
             </Card>
           </router-link>
-          <router-link to="/horarios" class="option-card">
+          <router-link to="/horarioaluno" class="option-card">
             <Card height="25vh" width="100%">
               <img class="icon-schedule" alt="Icon schedule" :src="iconSchedule" />
               <div class="text-wrapper-19">HORÁRIOS</div>

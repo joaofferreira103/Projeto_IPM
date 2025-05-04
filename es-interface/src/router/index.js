@@ -13,6 +13,7 @@ import OptionsPage from "@/views/OptionsPage.vue";
 import RequestsPage from "@/views/RequestsPage.vue";
 import CourseDetailsPage from "@/views/CourseDetailsPage.vue";
 import ScheduleHomePage from "@/views/ScheduleHomePage.vue";
+import ScheduleStudentPage from "@/views/ScheduleStudentPage.vue";
 
 
 const routes = [
@@ -86,6 +87,12 @@ const routes = [
     name: "ScheduleHomePage",
     component: ScheduleHomePage,
   },
+  { 
+    path: "/horarioaluno",
+    name: "ScheduleStudentPage",
+    component: ScheduleStudentPage,
+  }
+  
 ];
 
 const router = createRouter({
