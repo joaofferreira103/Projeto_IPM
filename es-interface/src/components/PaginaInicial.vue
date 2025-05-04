@@ -4,11 +4,8 @@
     <div class="overlap-group-wrapper">
       <div class="overlap-group">
         <img class="backgorund" alt="Background" :src="backgorund" />
-        <img class="swap_logo" alt="Swap_logo" :src="swap_logo" />
         <div class="div" />
         <img class="icon" alt="Icon_person" :src="icon_person" />
-        <router-link to="/login" class="text-wrapper">Login</router-link>
-        <router-link to="/register" class="text-wrapper-2">Registar</router-link>
         <div class="text-wrapper-3">Iniciar sessão</div>
         <div class="rectangle-2" />
         <div class="text-wrapper-4">Desenvolvido pelos brabos ®</div>

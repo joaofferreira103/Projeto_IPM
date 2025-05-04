@@ -235,73 +235,85 @@
         return allocation ? allocation.shiftId : null;
       },
       async saveAllocation({ tShiftId, plShiftId }) {
-        const databaseStore = useDatabaseStore();
-  
-        // Função auxiliar para gerar o próximo id numérico sequencial
-        async function getNextAllocationId() {
-          const res = await fetch("http://localhost:3000/allocations");
-          const allocations = await res.json();
-          const maxId = Math.max(
-            ...allocations.map(a => Number(a.id)).filter(n => !isNaN(n)),
-            0
-          );
-          return maxId + 1;
-        }
-  
-        // --- Troca TEÓRICO ---
-        if (tShiftId) {
-          let res = await fetch("http://localhost:3000/allocations");
-          let allocations = await res.json();
-          const oldTAllocations = allocations.filter((a) => {
-            if (Number(a.studentId) !== Number(this.alunoParaEditar.id)) return false;
-            const shift = databaseStore.shifts.find(s => Number(s.id) === Number(a.shiftId));
-            return shift && shift.type === 'T' && Number(shift.courseId) === Number(this.course.id);
-          });
-          for (const alloc of oldTAllocations) {
-            await fetch(`http://localhost:3000/allocations/${alloc.id}`, { method: "DELETE" });
-          }
-          await databaseStore.loadDatabase();
-          const nextId = await getNextAllocationId();
-          await fetch(`http://localhost:3000/allocations`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              id: Number(nextId),
-              shiftId: Number(tShiftId),
-              studentId: Number(this.alunoParaEditar.id)
-            })
-          });
-        }
-  
-        // --- Troca PRÁTICO ---
-        if (plShiftId) {
-          let res = await fetch("http://localhost:3000/allocations");
-          let allocations = await res.json();
-          const oldPLAllocations = allocations.filter((a) => {
-            if (Number(a.studentId) !== Number(this.alunoParaEditar.id)) return false;
-            const shift = databaseStore.shifts.find(s => Number(s.id) === Number(a.shiftId));
-            return shift && (shift.type === 'PL' || shift.type === 'TP') && Number(shift.courseId) === Number(this.course.id);
-          });
-          for (const alloc of oldPLAllocations) {
-            await fetch(`http://localhost:3000/allocations/${alloc.id}`, { method: "DELETE" });
-          }
-          await databaseStore.loadDatabase();
-          const nextId = await getNextAllocationId();
-          await fetch(`http://localhost:3000/allocations`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              id: Number(nextId),
-              shiftId: Number(plShiftId),
-              studentId: Number(this.alunoParaEditar.id)
-            })
-          });
-        }
-  
-        await databaseStore.loadDatabase();
-        this.showEditOverlay = false;
-        this.alunoParaEditar = null;
-      }
+  const databaseStore = useDatabaseStore();
+
+  // Função auxiliar para gerar o próximo id numérico sequencial
+  async function getNextAllocationId() {
+    const res = await fetch("http://localhost:3000/allocations");
+    const allocations = await res.json();
+    const maxId = Math.max(
+      ...allocations.map(a => Number(a.id)).filter(n => !isNaN(n)),
+      0
+    );
+    return maxId + 1;
+  }
+
+  // --- Troca TEÓRICO ---
+  if (tShiftId) {
+    // Busca allocations e shifts atualizados do backend
+    let resAlloc = await fetch("http://localhost:3000/allocations");
+    let allocations = await resAlloc.json();
+    let resShifts = await fetch("http://localhost:3000/shifts");
+    let shifts = await resShifts.json();
+
+    // Só remove allocations do mesmo tipo (T) e da mesma cadeira
+    const oldTAllocations = allocations.filter((a) => {
+      if (Number(a.studentId) !== Number(this.alunoParaEditar.id)) return false;
+      const shift = shifts.find(s => Number(s.id) === Number(a.shiftId));
+      return shift && shift.type === 'T' && Number(shift.courseId) === Number(this.course.id);
+    });
+    for (const alloc of oldTAllocations) {
+      await fetch(`http://localhost:3000/allocations/${alloc.id}`, { method: "DELETE" });
+    }
+    // Recarrega allocations do backend para garantir estado atualizado
+    await databaseStore.loadDatabase();
+    const nextId = await getNextAllocationId();
+    await fetch(`http://localhost:3000/allocations`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: Number(nextId),
+        shiftId: Number(tShiftId),
+        studentId: Number(this.alunoParaEditar.id)
+      })
+    });
+  }
+
+  // --- Troca PRÁTICO ---
+  if (plShiftId) {
+    // Busca allocations e shifts atualizados do backend
+    let resAlloc = await fetch("http://localhost:3000/allocations");
+    let allocations = await resAlloc.json();
+    let resShifts = await fetch("http://localhost:3000/shifts");
+    let shifts = await resShifts.json();
+
+    // Só remove allocations do mesmo tipo (PL/TP) e da mesma cadeira
+    const oldPLAllocations = allocations.filter((a) => {
+      if (Number(a.studentId) !== Number(this.alunoParaEditar.id)) return false;
+      const shift = shifts.find(s => Number(s.id) === Number(a.shiftId));
+      return shift && (shift.type === 'PL' || shift.type === 'TP') && Number(shift.courseId) === Number(this.course.id);
+    });
+    for (const alloc of oldPLAllocations) {
+      await fetch(`http://localhost:3000/allocations/${alloc.id}`, { method: "DELETE" });
+    }
+    // Recarrega allocations do backend para garantir estado atualizado
+    await databaseStore.loadDatabase();
+    const nextId = await getNextAllocationId();
+    await fetch(`http://localhost:3000/allocations`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: Number(nextId),
+        shiftId: Number(plShiftId),
+        studentId: Number(this.alunoParaEditar.id)
+      })
+    });
+  }
+
+  await databaseStore.loadDatabase();
+  this.showEditOverlay = false;
+  this.alunoParaEditar = null;
+}
     }
   };
   </script>
