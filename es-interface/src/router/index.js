@@ -87,12 +87,21 @@ const routes = [
     name: "ScheduleHomePage",
     component: ScheduleHomePage,
   },
+<<<<<<< HEAD
   { 
     path: "/horarioaluno",
     name: "ScheduleStudentPage",
     component: ScheduleStudentPage,
   }
   
+=======
+  {
+    path: "/novo-pedido-troca",
+    name: "ShiftRequestPage",
+    component: () => import("@/views/ShiftRequestPage.vue"),
+    meta: { requiresAuth: true, role: "student" },
+  }
+>>>>>>> ee629018a8593bb7308e255ce5451fb937942311
 ];
 
 const router = createRouter({
